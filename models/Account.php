@@ -10,6 +10,7 @@ class Account extends ActiveRecord{
 
     public function rules(){
         return [
+            ["id","safe"],
             ["account","safe"],
             ["password","safe"],
         ];

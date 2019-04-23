@@ -8,6 +8,7 @@ use yii\web\Controller;
 use app\models\EntryForm;//引入命名空间
 use app\models\Country;
 use app\models\Account;
+use yii\helpers\Url;
 
 class TestController extends Controller{
 
@@ -79,5 +80,19 @@ class TestController extends Controller{
 
 
         return $this->render("account",["model" => $model]);
+    }
+
+    public function actionUrl(){
+
+        echo "Url::to";echo "<br>";
+        echo 'Url::to(\"site/index\") '.Url::to("site/index");echo "<br>";
+        echo 'Url::to(["site/index"]) '.Url::to(["site/index"]);echo "<br>";
+        echo 'Url::to("site/index",true) '.Url::to("site/index",true);echo "<br>";
+        echo 'Url::to(["site/index"],true) '.Url::to(["site/index"],true);echo "<br>";
+        echo "Url::toRoute";echo "<br>";
+        echo 'Url::toRoute("site/index") '.Url::toRoute("site/index");echo "<br>";
+        echo 'Url::toRoute(["site/index"]) '.Url::toRoute(["site/index"]);echo "<br>";
+        echo 'Url::toRoute("site/index",true) '.Url::toRoute("site/index",true);echo "<br>";
+        echo 'Url::toRoute(["site/index"],true) '.Url::toRoute(["site/index"],true);echo "<br>";
     }
 }

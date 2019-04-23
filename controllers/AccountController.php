@@ -7,33 +7,34 @@ use Yii;
 use yii\web\Controller;
 use app\models\Account;
 use yii\data\Pagination;
+use yii\helpers\Url;
 
 
 class AccountController extends Controller {
 
     public function actionIndex(){
         $query = Account::find();
+        $countQuery = clone $query;
+        $count = $countQuery->count();
 
-        $count = $query->count();
-
-        $pagination = new Pagination(['totalCount' => $count]);
+        $pagination = new Pagination(['totalCount' => $count,"pageSize" => 2]);
 
         $accounts = $query->offset($pagination->offset)
             ->limit($pagination->limit)
             ->all();
 
-        return $this->render("index",["accounts" => $accounts]);
+        return $this->render("index",["accounts" => $accounts,"pagination" => $pagination]);
     }
 
     public function actionCreate(){
         $model = new Account();
         if(Yii::$app->request->isPost){
             if($model->load(Yii::$app->request->post()) && $model->save()){
-                $this->render("index",["model" => $model]);
+                return $this->redirect(Url::toRoute(["account/index"]));
             }
         }
 
-        return $this->render("index",["model" => $model]);
+        return $this->render("create",["model" => $model]);
     }
 
     public function actionDelete(){
@@ -43,20 +44,29 @@ class AccountController extends Controller {
             $account->delete();
         }
 
-        //return $this->render("index",["model" => $account]);
+        return $this->redirect(Url::toRoute(["account/index"]));
     }
 
     public function actionUpdate(){
-        $id = Yii::$app->request->post("id",0);
-        $password = Yii::$app->request->post("password",'');
-        $account = Account::findOne($id);
-        $account["password"] = $password;
-        $account->update();
+        if(Yii::$app->request->isPost){
+            $Account = Yii::$app->request->post("Account",[]);
+            if(empty($Account)){
+                $account = Account::findOne($Account['id']);
+                $account['account'] = $Account['account'];
+                $account['password'] = $Account['password'];
+                $account->save();
+            }
+        }
+        return $this->redirect(Url::toRoute(["account/index"]));
     }
 
     public function actionRead(){
         $id = Yii::$app->request->get("id",0);
         $account = Account::findOne($id);
-        return $this->render('index',["model" => $account]);
+        if($account){
+            return $this->render('read',["model" => $account]);
+        }
+
+        return $this->redirect(Url::toRoute(["account/index"]));
     }
 }
