@@ -20,7 +20,7 @@ class TestController extends Controller{
 
         //index 视图应该存为 views/test/index.php 文件
         //按 views/控制器 ID/视图名.php 路径加载 PHP 文件
-        return $this->render('index', array('msg' => $msg));
+                return $this->render('index', array('msg' => $msg));
 //        $model = new EntryForm();
 //        if ($model->load(Yii::$app->request->post(),'') && $model->validate()) {
 //            return $this->render('index', array('msg' => $msg));
